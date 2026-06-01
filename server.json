@@ -1,0 +1,18 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.pipeworx-io/czso-cz",
+  "title": "Czso Cz",
+  "description": "Czech Statistical Office (Český statistický úřad, ČSÚ) open-data MCP.",
+  "version": "0.1.0",
+  "websiteUrl": "https://pipeworx.io/packs/czso-cz",
+  "repository": {
+    "url": "https://github.com/pipeworx-io/mcp-czso-cz",
+    "source": "github"
+  },
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://gateway.pipeworx.io/czso-cz/mcp"
+    }
+  ]
+}
