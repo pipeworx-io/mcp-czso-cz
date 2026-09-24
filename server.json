@@ -3,7 +3,7 @@
   "name": "io.github.pipeworx-io/czso-cz",
   "title": "Czso Cz",
   "description": "Czech Statistical Office (Český statistický úřad, ČSÚ) open-data MCP.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "websiteUrl": "https://pipeworx.io/packs/czso-cz",
   "repository": {
     "url": "https://github.com/pipeworx-io/mcp-czso-cz",
