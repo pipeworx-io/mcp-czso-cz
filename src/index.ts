@@ -764,6 +764,29 @@ const tools: McpToolExport['tools'] = [
 ];
 
 async function callTool(name: string, args: Record<string, unknown>): Promise<unknown> {
+  try {
+    return await dispatch(name, args);
+  } catch (err) {
+    // ČSÚ answers an unknown dataset code with a bare 404 (empty body) and an
+    // unknown version with a 404 whose body says the selection "selhala"
+    // (failed validation). Both threw as `CZSO: 404` and booked as a Pipeworx
+    // defect with "retry the same tool" (fleet #2496).
+    if (err instanceof CzsoHttpError && err.status === 404) {
+      const kod = typeof args.kod === 'string' ? args.kod.trim() : '';
+      const verze = typeof args.verze === 'string' && args.verze.trim() ? args.verze.trim() : '';
+      return {
+        error: 'not_found',
+        message: verze
+          ? `ČSÚ has no version "${verze}" of dataset "${kod}" (or no dataset "${kod}"). Omit verze to use the latest, or check it with dataset_detail({kod: "${kod}"}).`
+          : `ČSÚ has no dataset "${kod}". Call list_datasets({query: "..."}) to find the code.`,
+        kod,
+      };
+    }
+    throw err;
+  }
+}
+
+async function dispatch(name: string, args: Record<string, unknown>): Promise<unknown> {
   switch (name) {
     case 'list_datasets': {
       const all = (await czsoGet(`${CATALOG}/sady`)) as Array<Record<string, unknown>>;
@@ -817,8 +840,19 @@ async function czsoGet(url: string, lang?: string): Promise<unknown> {
   const headers: Record<string, string> = { Accept: 'application/json', 'User-Agent': UA };
   if (lang) headers['Accept-Language'] = lang;
   const res = await pwFetch(url, { headers });
-  if (!res.ok) throw new Error(`CZSO: ${res.status} ${await res.text().then((t) => t.slice(0, 200))}`);
+  if (!res.ok) {
+    const body = await res.text().then((t) => t.slice(0, 200));
+    throw new CzsoHttpError(res.status, `CZSO: ${res.status} ${body}`);
+  }
   return res.json();
+}
+
+class CzsoHttpError extends Error {
+  readonly status: number;
+  constructor(status: number, message: string) {
+    super(message);
+    this.status = status;
+  }
 }
 
 function reqStr(args: Record<string, unknown>, key: string, example: string): string {

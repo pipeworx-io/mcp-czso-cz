@@ -1,6 +1,6 @@
 {
   "name": "@pipeworx/mcp-czso-cz",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Czech Statistical Office (Český statistický úřad, ČSÚ) open-data MCP.",
   "type": "module",
   "main": "src/index.ts",
@@ -26,7 +26,7 @@
     "@cloudflare/workers-types": "^4.20260405.1"
   },
   "pipeworx": {
-    "sourceHash": "v1-46abc89ce410c1d91b17f387702cc5ee0e1b1d9ba5cb9707393306c52118535c",
-    "sourceCommit": "5b29c2b0c11e1fcd954969a245b474e6e9475116"
+    "sourceHash": "v1-e8afdcc30c8fafebe255012297c7c0ed3d8f9ca6d54e7ee1841da047267d2115",
+    "sourceCommit": "a00767651388cfd017fdeac82188622721db2051"
   }
 }
